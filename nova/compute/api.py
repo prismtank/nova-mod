@@ -1512,6 +1512,11 @@ class API(base.Base):
             instance = self._apply_instance_name_template(context, instance,
                                                           index)
 
+        # Implement additional boolean configuration parameter, force_multi_instance_display_name,
+        # so that multi_instance_display_name_template is applied for single instances as well.
+        if num_instances == 1 and CONF.force_multi_instance_display_name:
+            instance = self._apply_instance_name_template(context, instance, index)
+
         return instance
 
     # This method remains because cellsv1 uses it in the scheduler
