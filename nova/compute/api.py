@@ -564,11 +564,13 @@ class API(base.Base):
             'auto_disk_config': auto_disk_config
         }
 
-    def _new_instance_name_from_template(self, uuid, display_name, index):
+    # Extend a template key, so that "project-name" can be specified in the template
+    def _new_instance_name_from_template(self, uuid, display_name, index, project_name=None):
         params = {
             'uuid': uuid,
             'name': display_name,
             'count': index + 1,
+            'project_name': project_name,
         }
         try:
             new_name = (CONF.multi_instance_display_name_template %
