@@ -111,6 +111,8 @@ AGGREGATE_ACTION_ADD = 'Add'
 # trigger.
 CELLS = []
 
+# Record instance names and make them unique
+instance_name_record = {}
 
 def check_instance_state(vm_state=None, task_state=(None,),
                          must_have_launched=True):
@@ -566,10 +568,19 @@ class API(base.Base):
 
     # Extend a template key, so that "project-name" can be specified in the template
     def _new_instance_name_from_template(self, uuid, display_name, index, project_name=None):
+
+        # Extend the "count" template key, so that VMs having same requested name can always have unique display name
+        alternative_count = index + 1
+        if display_name in instance_name_record:
+            instance_name_record[display_name] += 1
+            alternative_count = instance_name_record[display_name]
+        else:
+            instance_name_record[display_name] = 1
+
         params = {
             'uuid': uuid,
             'name': display_name,
-            'count': index + 1,
+            'count': alternative_count,
             'project_name': project_name,
         }
         try:
