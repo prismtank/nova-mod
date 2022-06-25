@@ -575,7 +575,7 @@ class API(base.Base):
             instance_name_record[display_name] += 1
             alternative_count = instance_name_record[display_name]
         else:
-            instance_name_record[display_name] = 1
+            instance_name_record[display_name] = index + 1
 
         params = {
             'uuid': uuid,
